@@ -1,9 +1,17 @@
 package com.revature.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.revature.beans.Account;
+import com.revature.beans.Transaction;
 import com.revature.beans.User;
+import com.revature.beans.Transaction.TransactionType;
 import com.revature.dao.AccountDao;
 import com.revature.exceptions.OverdraftException;
+import com.revature.exceptions.UnauthorizedException;
+import com.revature.utils.SessionCache;
 
 /**
  * This class should contain the business logic for performing operations on Accounts
@@ -24,6 +32,24 @@ public class AccountService {
 	 */
 	public void withdraw(Account a, Double amount) {
 		
+		double newBalance = a.getBalance() - amount;
+		if (amount < 0 || !a.isApproved()) {
+			throw new UnsupportedOperationException();
+		}
+		else if (newBalance < 0) {
+			throw new OverdraftException();
+		} 
+		// Get the accounts transactions and add a new withdrawal type Transactions
+		List<Transaction> transactions = a.getTransactions();
+		Transaction t = new Transaction();
+		t.setAmount(amount);
+		t.setType(TransactionType.WITHDRAWAL);
+		t.setTimestamp();
+		transactions.add(t);
+		// Set the new balance and transaction list of account a
+		a.setBalance(newBalance);
+		a.setTransactions(transactions);
+		actDao.updateAccount(a);
 	}
 	
 	/**
@@ -31,9 +57,20 @@ public class AccountService {
 	 * @throws UnsupportedOperationException if amount is negative
 	 */
 	public void deposit(Account a, Double amount) {
-		if (!a.isApproved()) {
+		double newBalance = a.getBalance() + amount;
+		if (amount < 0 || !a.isApproved()) {
 			throw new UnsupportedOperationException();
 		}
+		List<Transaction> transactions = a.getTransactions();
+		Transaction t = new Transaction();
+		t.setAmount(amount);
+		t.setType(TransactionType.DEPOSIT);
+		t.setTimestamp();
+		transactions.add(t);
+		// Set the new balance and transaction list of account a
+		a.setBalance(newBalance);
+		a.setTransactions(transactions);
+		actDao.updateAccount(a);
 	}
 	
 	/**
@@ -46,7 +83,30 @@ public class AccountService {
 	 * @param amount the monetary value to transfer
 	 */
 	public void transfer(Account fromAct, Account toAct, double amount) {
-		
+		double fromBal = fromAct.getBalance() - amount;
+		double toBal = toAct.getBalance() + amount;
+		if (amount < 0 || (fromBal < 0)) {
+			throw new UnsupportedOperationException();
+		}
+		fromAct.setBalance(fromBal);
+		toAct.setBalance(toBal);
+		Transaction trans = new Transaction();
+		Transaction trans2 = new Transaction();
+		List<Transaction> transListFrom = fromAct.getTransactions();
+		List<Transaction> transListTo = toAct.getTransactions();
+		trans.setSender(fromAct);
+		trans.setRecipient(toAct);
+		trans.setAmount(amount);
+		trans.setType(TransactionType.TRANSFER);
+		trans2.setSender(fromAct);
+		trans2.setRecipient(toAct);
+		trans2.setAmount(amount);
+		trans2.setType(TransactionType.TRANSFER);
+		transListFrom.add(trans);
+		transListTo.add(trans2);
+		toAct.setTransactions(transListTo);
+		actDao.updateAccount(fromAct);
+		actDao.updateAccount(toAct);
 	}
 	
 	/**
@@ -54,7 +114,24 @@ public class AccountService {
 	 * @return the Account object that was created
 	 */
 	public Account createNewAccount(User u) {
-		return null;
+		Account a = new Account();
+		// Set the transactions of a newly created account to an empty ArrayList
+		List<Transaction> transactions = new ArrayList<>();
+		a.setTransactions(transactions);
+		a.setApproved(false);
+		a.setBalance(STARTING_BALANCE);
+		a.setOwnerId(u.getId());
+		actDao.addAccount(a);
+		List<Account> accs;
+		if (u.getAccounts() == null) {
+			accs = new ArrayList<>();
+		} else {
+			accs = u.getAccounts();
+		}
+		accs = new ArrayList<>();
+		accs.add(a);
+		u.setAccounts(accs);
+		return a;
 	}
 	
 	/**
@@ -65,6 +142,17 @@ public class AccountService {
 	 * @return true if account is approved, or false if unapproved
 	 */
 	public boolean approveOrRejectAccount(Account a, boolean approval) {
+		Optional<User> u = SessionCache.getCurrentUser();
+		if (u.isPresent()) {
+			User user = u.get();
+			if (user.getUserType() == User.UserType.EMPLOYEE) {
+				a.setApproved(approval);
+				return a.isApproved();
+			} else {
+				throw new UnauthorizedException();
+			}
+			
+		}
 		return false;
 	}
 }
