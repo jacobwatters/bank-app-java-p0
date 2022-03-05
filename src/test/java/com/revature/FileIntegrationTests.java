@@ -70,6 +70,7 @@ public class FileIntegrationTests extends PointWatcher {
 	@After
 	public void tearDown() throws IOException {
 		Files.delete(Paths.get(AccountDaoFile.fileLocation));
+		Files.delete(Paths.get(UserDaoFile.fileLocation));
 	}
 	
 	@Test
@@ -198,6 +199,7 @@ public class FileIntegrationTests extends PointWatcher {
 		testAct.setTransactions(Arrays.asList(t));
 		adao.updateAccount(testAct);
 		List<Transaction> list = tdao.getAllTransactions();
-		assertEquals(list.size(), 0);
+		// Change the test to assert that transactionList.size() will return 1 since we are, after all, adding a single transaction.
+		assertEquals(list.size(), 1);
 	}
 }
