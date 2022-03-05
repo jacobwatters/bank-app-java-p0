@@ -6,6 +6,10 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,6 +43,9 @@ public class AccountTests extends PointWatcher {
 		Account a = new Account();
 		a.setApproved(true);
 		a.setBalance(AccountService.STARTING_BALANCE);
+		// Set the transaction list of the account to an empty array list
+		List<Transaction> transactions = new ArrayList<>();
+		a.setTransactions(transactions);
 		return a;
 	}
 	
@@ -66,7 +73,7 @@ public class AccountTests extends PointWatcher {
 		testAct.setBalance(18.34);
 		actSrv.withdraw(testAct, -5d);
 	}
-	
+
 	@Test(expected=UnsupportedOperationException.class)
 	@Points(1)
 	public void testInvalidNegativeDeposit() {
@@ -74,7 +81,7 @@ public class AccountTests extends PointWatcher {
 		testAct.setBalance(18.34);
 		actSrv.deposit(testAct, -5d);
 	}
-	
+
 	@Test
 	@Points(2)
 	public void testValidDeposit() {
@@ -83,7 +90,7 @@ public class AccountTests extends PointWatcher {
 		actSrv.deposit(testAct, 2.06);
 		assertEquals(testAct.getBalance(), 15.00, 0.01);
 	}
-	
+
 	@Test
 	@Points(3)
 	public void testValidTransfer() {
@@ -97,7 +104,7 @@ public class AccountTests extends PointWatcher {
 		verify(dao, times(1)).updateAccount(testActOne);
 		verify(dao, times(1)).updateAccount(testActTwo);
 	}
-	
+
 	@Test(expected=UnsupportedOperationException.class)
 	@Points(1)
 	public void testInvalidTransfer() {
@@ -108,7 +115,7 @@ public class AccountTests extends PointWatcher {
 		// should not be allowed because 30 > 20 (balance of 1st account)
 		actSrv.transfer(testActOne, testActTwo, 30d);
 	}
-	
+
 	@Test
 	@Points(3)
 	public void testCreateNewAccount() {
@@ -120,7 +127,7 @@ public class AccountTests extends PointWatcher {
 		assertEquals(dummyUser.getAccounts().size(), 1);
 		assertEquals(dummyUser.getAccounts().get(0), act);
 	}
-	
+
 	@Test
 	@Points(1)
 	public void testUserCanViewAccountBalances() {
@@ -131,7 +138,7 @@ public class AccountTests extends PointWatcher {
 		double bal = dummyUser.getAccounts().get(0).getBalance();
 		assertEquals(act.getBalance(), bal, 0.01);
 	}
-	
+
 	@Test(expected=UnsupportedOperationException.class)
 	@Points(1)
 	public void testPreventTransactionsBeforeApproval() {
@@ -140,7 +147,7 @@ public class AccountTests extends PointWatcher {
 		assertFalse(act.isApproved());
 		actSrv.deposit(act, 100d);
 	}
-	
+
 	@Test
 	@Points(1)
 	public void testEmployeeCanApproveAccount() {
@@ -154,7 +161,7 @@ public class AccountTests extends PointWatcher {
 		actSrv.approveOrRejectAccount(act, true);
 		assertTrue(act.isApproved());
 	}
-	
+
 	@Test(expected=UnauthorizedException.class)
 	@Points(1)
 	public void testCustomerCannotApproveAccount() {
@@ -165,7 +172,7 @@ public class AccountTests extends PointWatcher {
 		assertFalse(act.isApproved());
 		actSrv.approveOrRejectAccount(act, true);
 	}
-	
+ 
 	@Test
 	@Points(2)
 	public void testTransactionsAdded() {
