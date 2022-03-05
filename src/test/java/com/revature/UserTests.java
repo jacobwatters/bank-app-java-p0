@@ -6,6 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -40,6 +43,10 @@ public class UserTests extends PointWatcher {
 				return null;
 			}
 		});
+		List<User> allUsers = new ArrayList<>();
+		allUsers.add(mockUser);
+		// Mock to allow the DAO layer to return a list of all Users to check if a username exists
+		when(udao.getAllUsers()).thenReturn(allUsers);
 	}
 	
 	/*
