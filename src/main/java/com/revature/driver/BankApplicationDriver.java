@@ -71,7 +71,7 @@ public class BankApplicationDriver {
 					System.out.println("\n\t\t\t 1. Register");
 					System.out.println("\t\t\t 2. Login");
 					System.out.println("\t\t\t 3. Exit");
-					System.out.print("Enter your Choice [1-5] :");
+					System.out.print("Enter your Choice [1-3] :");
 					choice = input.nextInt();
 
 					switch (choice) {
