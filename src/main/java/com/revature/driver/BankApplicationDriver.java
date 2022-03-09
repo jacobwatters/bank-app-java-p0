@@ -287,17 +287,19 @@ public class BankApplicationDriver {
 				System.out.println("\n\t\t\t 1. Manage Customers");
 				System.out.println("\t\t\t 2. View Transaction Log");
 				System.out.println("\t\t\t 3. Logout");
-				System.out.println("\t\t\t 4. Exit");
-				System.out.print("Enter your Choice [1-5] :");
+				System.out.print("Enter your Choice [1-3] :");
 				choice = input.nextInt();
 				switch (choice) {
 				case 1:
 					List<Account> accounts = adao.getAccounts();
-					System.out.println("Customer Accounts");
+					printLine();
+					System.out.println("User Accounts  \t\t\t\t\t\t\t\t *****");
+					printLine();
 					System.out.println("ID \t Balance \t\tType \t\tApproved");
 					accounts.forEach(a -> {
 						System.out.println(a.getId() + " \t " + a.getBalance() + " \t\t\t" + a.getType() + "   \t" + a.isApproved());
 					});
+					printLine();
 					System.out.println("\n\t\t\t 1. Approve or reject an account");
 					System.out.println("\t\t\t 2. Return");
 					System.out.print("Enter your Choice [1-2] :");
@@ -338,7 +340,9 @@ public class BankApplicationDriver {
 					break;
 				case 2:
 					List<Transaction> transactions = tdao.getAllTransactions();
-					System.out.println("Customer Accounts");
+					printLine();
+					System.out.println("Transactions \t\t\t\t\t\t\t\t *****");
+					printLine();
 					for(Transaction tLog: transactions) {
 						TransactionType ty = tLog.getType();
 						if (ty.equals(TransactionType.WITHDRAWAL)) {

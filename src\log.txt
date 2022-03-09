@@ -14,3 +14,15 @@
 2022-03-08 22:50:34 INFO  BankApplicationDriver:241 - Withdrawal transaction
 2022-03-08 22:50:39 INFO  BankApplicationDriver:270 - User logged out
 2022-03-08 22:50:45 INFO  BankApplicationDriver:138 - e logged in
+2022-03-08 23:23:12 INFO  BankApplicationDriver:138 - t logged in
+2022-03-08 23:23:22 INFO  BankApplicationDriver:191 - Account created
+2022-03-08 23:23:56 INFO  BankApplicationDriver:227 - Deposit transaction
+2022-03-08 23:24:22 INFO  BankApplicationDriver:258 - Transfer transaction
+2022-03-08 23:26:06 INFO  BankApplicationDriver:270 - User logged out
+2022-03-08 23:26:16 INFO  BankApplicationDriver:138 - e logged in
+2022-03-08 23:27:53 INFO  BankApplicationDriver:354 - User logged out
+2022-03-08 23:27:56 INFO  BankApplicationDriver:138 - t logged in
+2022-03-08 23:28:06 ERROR BankApplicationDriver:265 - Deposit failed! The entered amount was negative.
+2022-03-08 23:34:34 INFO  BankApplicationDriver:270 - User logged out
+2022-03-08 23:34:40 INFO  BankApplicationDriver:138 - e logged in
+2022-03-08 23:40:38 INFO  BankApplicationDriver:138 - e logged in
