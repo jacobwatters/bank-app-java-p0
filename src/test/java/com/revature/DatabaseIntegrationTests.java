@@ -34,7 +34,7 @@ import com.revature.dao.UserDaoDB;
  * you run these tests on your machine. Don't forget to put it back again before you
  * push your code though.
  */
-@Ignore
+
 public class DatabaseIntegrationTests extends PointWatcher {
 	
 	AccountDao adao = new AccountDaoDB();
@@ -63,7 +63,11 @@ public class DatabaseIntegrationTests extends PointWatcher {
 	
 	@After
 	public void tearDown() throws IOException {
-		adao.removeAccount(toTest);
+		AccountDaoDB adb = new AccountDaoDB();
+		UserDaoDB udb = new UserDaoDB();
+		adb.truncateTable();
+		udb.truncateTable();
+		
 	}
 	
 	@Test
@@ -134,8 +138,12 @@ public class DatabaseIntegrationTests extends PointWatcher {
 	public void testGetAllUsers() {
 		User second = new User();
 		second.setId(2);
+		second.setFirstName("Test2FIRST");
+		second.setLastName("Test2LAST");
+		second.setUserType(UserType.CUSTOMER);
 		second.setUsername("test2");
 		second.setPassword("someTestPassword");
+		udao.addUser(second);
 		List<User> allUsers = udao.getAllUsers();
 		assertEquals(allUsers.size(), 2);
 	}
