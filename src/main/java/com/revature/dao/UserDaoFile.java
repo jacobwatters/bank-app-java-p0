@@ -26,6 +26,8 @@ public class UserDaoFile implements UserDao {
 			oos.writeObject(users); 
 		} catch (IOException e) {
 			System.out.println("IOException thrown");
+		} finally {
+			addUsersToStream(users);
 		}
 		return user;
 	}
@@ -90,9 +92,9 @@ public class UserDaoFile implements UserDao {
 	public boolean removeUser(User u) {
 		// TODO Auto-generated method stub
 		List<User> users = getAllUsers();
-		boolean success = users.removeIf(user -> user.equals(u));
+		boolean greatSuccess = users.removeIf(user -> user.equals(u));
 		addUsersToStream(users);
-		return success;
+		return greatSuccess;
 	}
 	
 	private void addUsersToStream(List<User> users) {

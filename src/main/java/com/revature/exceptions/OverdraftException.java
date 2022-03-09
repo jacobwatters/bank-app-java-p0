@@ -7,5 +7,8 @@ package com.revature.exceptions;
 public class OverdraftException extends RuntimeException {
 
 	private static final long serialVersionUID = -7168679456912742268L;
-
+	
+	public OverdraftException(String msg){
+        super(msg);
+    }
 }

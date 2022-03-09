@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.revature.beans.Account;
+import com.revature.beans.Account.AccountType;
 import com.revature.beans.Transaction;
 import com.revature.beans.User;
 import com.revature.beans.Transaction.TransactionType;
@@ -31,25 +32,22 @@ public class AccountService {
 	 * @throws UnsupportedOperationException if amount is negative
 	 */
 	public void withdraw(Account a, Double amount) {
-		
-		double newBalance = a.getBalance() - amount;
-		if (amount < 0 || !a.isApproved()) {
-			throw new UnsupportedOperationException();
-		}
-		else if (newBalance < 0) {
-			throw new OverdraftException();
+		if (a == null ) {
+			throw new UnsupportedOperationException("Withdraw failed! The account could not be fond");
+		} else if (!SessionCache.getCurrentUser().get().getAccounts().contains(a)) {
+			throw new UnsupportedOperationException("Withdraw failed! The account selected to deposit to could not be found");
 		} 
-		// Get the accounts transactions and add a new withdrawal type Transactions
-		List<Transaction> transactions = a.getTransactions();
-		Transaction t = new Transaction();
-		t.setAmount(amount);
-		t.setType(TransactionType.WITHDRAWAL);
-		t.setTimestamp();
-		transactions.add(t);
-		// Set the new balance and transaction list of account a
+		double newBalance = a.getBalance() - amount;
+		if (!a.isApproved()) {
+			throw new UnsupportedOperationException("Withdraw failed! This account is not approved.");
+		} else if (amount < 0) {
+			throw new UnsupportedOperationException("Withdraw failed! The entered amount was negative.");
+		} else if (newBalance < 0) {
+			throw new OverdraftException("Withdraw failed! The resulting balance would result in an overdraft.");
+		} 
 		a.setBalance(newBalance);
-		a.setTransactions(transactions);
 		actDao.updateAccount(a);
+		SessionCache.getCurrentUser().get().setAccounts(actDao.getAccountsByUser(SessionCache.getCurrentUser().get()));
 	}
 	
 	/**
@@ -57,20 +55,20 @@ public class AccountService {
 	 * @throws UnsupportedOperationException if amount is negative
 	 */
 	public void deposit(Account a, Double amount) {
-		double newBalance = a.getBalance() + amount;
-		if (amount < 0 || !a.isApproved()) {
-			throw new UnsupportedOperationException();
+		if (a == null ) {
+			throw new UnsupportedOperationException("Deposit failed! The account could not be fond");
+		} else if (!SessionCache.getCurrentUser().get().getAccounts().contains(a)) {
+			throw new UnsupportedOperationException("Deposit failed! The account selected to deposit to could not be found");
+		} 
+		Double newBalance = a.getBalance() + amount;
+		if (!a.isApproved()) {
+			throw new UnsupportedOperationException("Deposit failed! This account is not approved.");
+		} else if (amount < 0 ) {
+			throw new UnsupportedOperationException("Deposit failed! The entered amount was negative.");
 		}
-		List<Transaction> transactions = a.getTransactions();
-		Transaction t = new Transaction();
-		t.setAmount(amount);
-		t.setType(TransactionType.DEPOSIT);
-		t.setTimestamp();
-		transactions.add(t);
-		// Set the new balance and transaction list of account a
 		a.setBalance(newBalance);
-		a.setTransactions(transactions);
 		actDao.updateAccount(a);
+		SessionCache.getCurrentUser().get().setAccounts(actDao.getAccountsByUser(SessionCache.getCurrentUser().get()));
 	}
 	
 	/**
@@ -83,28 +81,29 @@ public class AccountService {
 	 * @param amount the monetary value to transfer
 	 */
 	public void transfer(Account fromAct, Account toAct, double amount) {
+		if (fromAct == null || toAct == null) {
+			throw new UnsupportedOperationException("Transfer failed! At least one of the accounts could not be fond");
+		} else if (!SessionCache.getCurrentUser().get().getAccounts().contains(fromAct)) {
+			throw new UnsupportedOperationException("Transfer failed! The account selected to transfer to could not be found");
+		} else if (!SessionCache.getCurrentUser().get().getAccounts().contains(toAct)) {
+			throw new UnsupportedOperationException("Transfer failed! The account selected to transfer from could not be found");
+		}
 		double fromBal = fromAct.getBalance() - amount;
 		double toBal = toAct.getBalance() + amount;
-		if (amount < 0 || (fromBal < 0)) {
-			throw new UnsupportedOperationException();
-		}
+		if (!fromAct.isApproved() || !toAct.isApproved()) {
+			throw new UnsupportedOperationException("Transfer failed! At least one of the accounts is unapproved");
+		} else if (amount < 0 ) {
+			throw new UnsupportedOperationException("Transfer failed! You cannot transfer a negative amount");
+		} else if (fromBal < 0) {
+			throw new UnsupportedOperationException("Transfer failed! The balance of the account withdrawn would have been negative");
+		} else if (toBal < 0) {
+			throw new UnsupportedOperationException("Transfer failed! The balance of the account to deposit would have been negative");
+		} else if (fromAct.getId() == toAct.getId()) {
+			throw new UnsupportedOperationException("Transfer failed! You cannot make a transfer to the same account");
+		} 
+				
 		fromAct.setBalance(fromBal);
 		toAct.setBalance(toBal);
-		Transaction trans = new Transaction();
-		Transaction trans2 = new Transaction();
-		List<Transaction> transListFrom = fromAct.getTransactions();
-		List<Transaction> transListTo = toAct.getTransactions();
-		trans.setSender(fromAct);
-		trans.setRecipient(toAct);
-		trans.setAmount(amount);
-		trans.setType(TransactionType.TRANSFER);
-		trans2.setSender(fromAct);
-		trans2.setRecipient(toAct);
-		trans2.setAmount(amount);
-		trans2.setType(TransactionType.TRANSFER);
-		transListFrom.add(trans);
-		transListTo.add(trans2);
-		toAct.setTransactions(transListTo);
 		actDao.updateAccount(fromAct);
 		actDao.updateAccount(toAct);
 	}
@@ -113,24 +112,28 @@ public class AccountService {
 	 * Creates a new account for a given User
 	 * @return the Account object that was created
 	 */
+	public Account createNewAccount(User u, AccountType type) {
+		Account a = new Account();
+		a.setApproved(false);
+		a.setBalance(STARTING_BALANCE);
+		a.setOwnerId(u.getId());
+		a.setType(type);
+		actDao.addAccount(a);
+		List<Account> accs = SessionCache.getCurrentUser().get().getAccounts();
+		accs.add(a);
+		SessionCache.getCurrentUser().get().setAccounts(accs);
+		return a;
+	}
+	
 	public Account createNewAccount(User u) {
 		Account a = new Account();
-		// Set the transactions of a newly created account to an empty ArrayList
-		List<Transaction> transactions = new ArrayList<>();
-		a.setTransactions(transactions);
 		a.setApproved(false);
 		a.setBalance(STARTING_BALANCE);
 		a.setOwnerId(u.getId());
 		actDao.addAccount(a);
-		List<Account> accs;
-		if (u.getAccounts() == null) {
-			accs = new ArrayList<>();
-		} else {
-			accs = u.getAccounts();
-		}
-		accs = new ArrayList<>();
+		List<Account> accs = SessionCache.getCurrentUser().get().getAccounts();
 		accs.add(a);
-		u.setAccounts(accs);
+		SessionCache.getCurrentUser().get().setAccounts(accs);
 		return a;
 	}
 	
@@ -147,9 +150,10 @@ public class AccountService {
 			User user = u.get();
 			if (user.getUserType() == User.UserType.EMPLOYEE) {
 				a.setApproved(approval);
+				actDao.updateAccount(a);
 				return a.isApproved();
 			} else {
-				throw new UnauthorizedException();
+				throw new UnauthorizedException("Unauthorized attempt at approving or rejecting an account!");
 			}
 			
 		}

@@ -22,4 +22,16 @@ public class TransactionDaoFile implements TransactionDao {
 		return allTrans;
 	}
 
+	@Override
+	public Transaction addTransaction(Transaction t, Account a) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Transaction addTransaction(Transaction t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
