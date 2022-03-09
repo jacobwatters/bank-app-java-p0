@@ -45,6 +45,7 @@ public class BankApplicationDriver {
 	}
 	
 	public static void main(String[] args) {
+		logger.info("System start");
 		int choice = 0;
 		Scanner input = new Scanner(System.in);
 		List<User> users = new ArrayList<>();

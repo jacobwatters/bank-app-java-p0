@@ -28,3 +28,57 @@
 2022-03-08 23:40:38 INFO  BankApplicationDriver:138 - e logged in
 2022-03-09 08:57:35 INFO  BankApplicationDriver:138 - e logged in
 2022-03-09 08:57:44 INFO  BankApplicationDriver:358 - User logged out
+2022-03-09 09:03:08 INFO  BankApplicationDriver:121 - employee created an account
+2022-03-09 09:03:29 INFO  BankApplicationDriver:138 - employee logged in
+2022-03-09 09:03:36 INFO  BankApplicationDriver:358 - User logged out
+2022-03-09 09:03:47 INFO  BankApplicationDriver:138 - t logged in
+2022-03-09 09:04:00 INFO  BankApplicationDriver:241 - Withdrawal transaction
+2022-03-09 09:04:04 INFO  BankApplicationDriver:270 - User logged out
+2022-03-09 09:04:13 INFO  BankApplicationDriver:138 - employee logged in
+2022-03-09 09:20:34 INFO  BankApplicationDriver:138 - jacobwatters logged in
+2022-03-09 09:20:52 ERROR BankApplicationDriver:265 - Deposit failed! The account could not be fond
+2022-03-09 09:31:07 INFO  BankApplicationDriver:270 - User logged out
+2022-03-09 09:31:32 ERROR BankApplicationDriver:124 - Username already exists
+2022-03-09 09:32:42 INFO  BankApplicationDriver:138 - jacobwatters logged in
+2022-03-09 09:32:55 ERROR BankApplicationDriver:265 - Transfer failed! At least one of the accounts could not be fond
+2022-03-09 09:33:11 INFO  BankApplicationDriver:191 - Account created
+2022-03-09 09:35:08 INFO  BankApplicationDriver:191 - Account created
+2022-03-09 09:35:13 INFO  BankApplicationDriver:191 - Account created
+2022-03-09 09:35:18 INFO  BankApplicationDriver:270 - User logged out
+2022-03-09 09:35:27 INFO  BankApplicationDriver:138 - employee logged in
+2022-03-09 09:40:04 INFO  BankApplicationDriver:358 - User logged out
+2022-03-09 09:40:14 INFO  BankApplicationDriver:48 - System start
+2022-03-09 09:40:26 INFO  BankApplicationDriver:139 - t logged in
+2022-03-09 09:41:56 ERROR BankApplicationDriver:266 - Deposit failed! The account could not be fond
+2022-03-09 09:41:58 INFO  BankApplicationDriver:271 - User logged out
+2022-03-09 09:42:18 INFO  BankApplicationDriver:139 - jacobwatters logged in
+2022-03-09 09:42:47 INFO  BankApplicationDriver:228 - Deposit transaction
+2022-03-09 09:43:09 INFO  BankApplicationDriver:242 - Withdrawal transaction
+2022-03-09 09:43:53 INFO  BankApplicationDriver:259 - Transfer transaction
+2022-03-09 09:44:21 INFO  BankApplicationDriver:271 - User logged out
+2022-03-09 09:44:33 INFO  BankApplicationDriver:139 - employee logged in
+2022-03-09 09:45:36 INFO  BankApplicationDriver:359 - User logged out
+2022-03-09 09:45:39 INFO  BankApplicationDriver:145 - System exit
+2022-03-09 09:45:45 INFO  BankApplicationDriver:48 - System start
+2022-03-09 10:39:22 INFO  BankApplicationDriver:48 - System start
+2022-03-09 10:40:02 INFO  BankApplicationDriver:122 - siva created an account
+2022-03-09 10:40:19 INFO  BankApplicationDriver:139 - siva logged in
+2022-03-09 10:40:28 INFO  BankApplicationDriver:192 - Account created
+2022-03-09 10:40:33 INFO  BankApplicationDriver:192 - Account created
+2022-03-09 10:40:36 INFO  BankApplicationDriver:271 - User logged out
+2022-03-09 10:40:51 INFO  BankApplicationDriver:139 - employee logged in
+2022-03-09 10:41:44 INFO  BankApplicationDriver:359 - User logged out
+2022-03-09 10:41:53 INFO  BankApplicationDriver:139 - jacobwatters logged in
+2022-03-09 10:42:06 INFO  BankApplicationDriver:228 - Deposit transaction
+2022-03-09 10:42:31 ERROR BankApplicationDriver:266 - Deposit failed! The account could not be fond
+2022-03-09 10:42:58 ERROR BankApplicationDriver:266 - Deposit failed! The entered amount was negative.
+2022-03-09 10:43:17 INFO  BankApplicationDriver:242 - Withdrawal transaction
+2022-03-09 10:43:33 INFO  BankApplicationDriver:259 - Transfer transaction
+2022-03-09 10:43:51 ERROR BankApplicationDriver:266 - Deposit failed! The account selected to deposit to could not be found
+2022-03-09 10:43:54 INFO  BankApplicationDriver:271 - User logged out
+2022-03-09 10:44:04 INFO  BankApplicationDriver:139 - employee logged in
+2022-03-09 10:44:22 INFO  BankApplicationDriver:359 - User logged out
+2022-03-09 10:44:35 INFO  BankApplicationDriver:139 - jacobwatters logged in
+2022-03-09 10:44:49 ERROR BankApplicationDriver:266 - Transfer failed! You cannot make a transfer to the same account
+2022-03-09 10:45:17 ERROR BankApplicationDriver:266 - Transfer failed! The account selected to transfer from could not be found
+2022-03-09 13:08:10 INFO  BankApplicationDriver:48 - System start

@@ -34,7 +34,7 @@ import com.revature.dao.UserDaoDB;
  * you run these tests on your machine. Don't forget to put it back again before you
  * push your code though.
  */
-
+@Ignore
 public class DatabaseIntegrationTests extends PointWatcher {
 	
 	AccountDao adao = new AccountDaoDB();
